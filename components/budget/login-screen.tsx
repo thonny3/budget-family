@@ -9,22 +9,26 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { Lock, User as UserIcon } from 'lucide-react';
 
-export default function LoginScreen() {
+interface LoginScreenProps {
+    onSwitchToRegister: () => void;
+}
+
+export default function LoginScreen({ onSwitchToRegister }: LoginScreenProps) {
     const { login } = useAuth();
     const [username, setUsername] = useState('Jean'); // Default for convenience
-    const [pin, setPin] = useState('');
+    const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!username || !pin) {
+        if (!username || !password) {
             toast.error('Veuillez remplir tous les champs');
             return;
         }
 
         setIsLoading(true);
         try {
-            const success = await login(username, pin);
+            const success = await login(username, password);
             if (success) {
                 toast.success(`Bienvenue, ${username} !`); // Removed emoji to avoid unicode issues if any
             } else {
@@ -63,16 +67,16 @@ export default function LoginScreen() {
                             </div>
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="pin" className="text-foreground">Code PIN</Label>
+                            <Label htmlFor="password" className="text-foreground">Mot de passe</Label>
                             <div className="relative">
                                 <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                                 <Input
-                                    id="pin"
+                                    id="password"
                                     type="password"
-                                    placeholder="••••"
+                                    placeholder="••••••••"
                                     className="pl-9 bg-input border-input text-foreground placeholder:text-muted-foreground focus-visible:ring-ring"
-                                    value={pin}
-                                    onChange={(e) => setPin(e.target.value)}
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                 />
                             </div>
                         </div>
@@ -85,8 +89,19 @@ export default function LoginScreen() {
                         </Button>
                     </form>
                 </CardContent>
-                <CardFooter className="flex justify-center text-xs text-muted-foreground">
-                    Codes démo : Jean/1234, Marie/5678
+                <CardFooter className="flex flex-col space-y-4 text-center">
+                    <div className="text-sm text-muted-foreground">
+                        Nouveau membre ?{' '}
+                        <button
+                            onClick={onSwitchToRegister}
+                            className="text-primary hover:underline font-medium"
+                        >
+                            Inscrivez-vous ici
+                        </button>
+                    </div>
+                    <div className="text-xs text-muted-foreground pt-4 border-t w-full">
+                        Codes démo : Jean/1234, Marie/5678
+                    </div>
                 </CardFooter>
             </Card>
         </div>

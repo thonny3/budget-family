@@ -11,26 +11,35 @@ export type User = {
 
 interface AuthContextType {
     user: User | null;
-    login: (name: string, pin: string) => Promise<boolean>;
+    login: (name: string, password: string) => Promise<boolean>;
+    register: (name: string, password: string) => Promise<boolean>;
     logout: () => void;
     isAuthenticated: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Mock users for the family budget app
-const MOCK_USERS = [
-    { id: '1', name: 'Jean', pin: '1234' },
-    { id: '2', name: 'Marie', pin: '5678' },
-    { id: '3', name: 'Admin', pin: '0000' } // For testing
-];
-
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
+    const [users, setUsers] = useState<{ id: string, name: string, password: string }[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    // Check for persisted session on mount
+    // Initial load
     useEffect(() => {
+        const storedUsers = localStorage.getItem('budget_users');
+        if (storedUsers) {
+            setUsers(JSON.parse(storedUsers));
+        } else {
+            // Initial mock users if none exist
+            const initialUsers = [
+                { id: '1', name: 'Jean', password: '1234' },
+                { id: '2', name: 'Marie', password: '5678' },
+                { id: '3', name: 'Admin', password: '0000' }
+            ];
+            setUsers(initialUsers);
+            localStorage.setItem('budget_users', JSON.stringify(initialUsers));
+        }
+
         const storedUser = localStorage.getItem('budget_user');
         if (storedUser) {
             try {
@@ -43,12 +52,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setIsLoading(false);
     }, []);
 
-    const login = async (name: string, pin: string): Promise<boolean> => {
-        // Simulate API delay
+    const login = async (name: string, password: string): Promise<boolean> => {
         await new Promise(resolve => setTimeout(resolve, 500));
 
-        const foundUser = MOCK_USERS.find(
-            u => u.name.toLowerCase() === name.toLowerCase() && u.pin === pin
+        const foundUser = users.find(
+            u => u.name.toLowerCase() === name.toLowerCase() && u.password === password
         );
 
         if (foundUser) {
@@ -61,6 +69,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return false;
     };
 
+    const register = async (name: string, password: string): Promise<boolean> => {
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        // Check if user already exists
+        if (users.find(u => u.name.toLowerCase() === name.toLowerCase())) {
+            return false;
+        }
+
+        const newUser = {
+            id: Math.random().toString(36).substr(2, 9),
+            name,
+            password
+        };
+
+        const updatedUsers = [...users, newUser];
+        setUsers(updatedUsers);
+        localStorage.setItem('budget_users', JSON.stringify(updatedUsers));
+
+        // Auto login after registration
+        const userData = { id: newUser.id, name: newUser.name };
+        setUser(userData);
+        localStorage.setItem('budget_user', JSON.stringify(userData));
+
+        return true;
+    };
+
     const logout = () => {
         setUser(null);
         localStorage.removeItem('budget_user');
@@ -71,6 +105,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             value={{
                 user,
                 login,
+                register,
                 logout,
                 isAuthenticated: !!user,
             }}

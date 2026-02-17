@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import LoginScreen from '@/components/budget/login-screen';
+import RegisterScreen from '@/components/budget/register-screen';
 import Sidebar from '@/components/budget/sidebar';
 import Dashboard from '@/components/budget/dashboard';
 import IncomeSection from '@/components/budget/income-section';
@@ -15,9 +16,14 @@ import TransactionsSection from '@/components/budget/transactions-section';
 export default function Page() {
   const { isAuthenticated } = useAuth();
   const [activeSection, setActiveSection] = useState<string>('dashboard');
+  const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
 
   if (!isAuthenticated) {
-    return <LoginScreen />;
+    return authMode === 'login' ? (
+      <LoginScreen onSwitchToRegister={() => setAuthMode('register')} />
+    ) : (
+      <RegisterScreen onSwitchToLogin={() => setAuthMode('login')} />
+    );
   }
 
   const renderSection = () => {
