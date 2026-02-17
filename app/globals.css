@@ -2,11 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-html {
-  color-scheme: dark;
-}
-
-
 body {
   font-family: Arial, Helvetica, sans-serif;
 }
@@ -50,15 +45,15 @@ body {
   }
 
   .budget-tag-success {
-    @apply bg-green-900/30 text-green-500 dark:bg-green-900/30 dark:text-green-400 bg-green-100 text-green-700;
+    @apply bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400;
   }
 
   .budget-tag-warning {
-    @apply bg-yellow-900/30 text-yellow-500 dark:bg-yellow-900/30 dark:text-yellow-400 bg-yellow-100 text-yellow-700;
+    @apply bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400;
   }
 
   .budget-tag-danger {
-    @apply bg-red-900/30 text-red-500 dark:bg-red-900/30 dark:text-red-400 bg-red-100 text-red-700;
+    @apply bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400;
   }
 }
 

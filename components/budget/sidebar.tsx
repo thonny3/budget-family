@@ -48,7 +48,7 @@ export default function Sidebar({ activeSection, onSectionChange }: SidebarProps
       {/* Mobile toggle */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed top-4 left-4 z-50 md:hidden bg-white text-black p-2 rounded-lg"
+        className="fixed top-4 left-4 z-50 md:hidden bg-primary text-primary-foreground p-2 rounded-lg"
       >
         {isOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
@@ -88,25 +88,25 @@ export default function Sidebar({ activeSection, onSectionChange }: SidebarProps
         </nav>
 
 
-        <div className="absolute bottom-6 left-6 right-6 pt-6 border-t border-[#333333]">
+        <div className="absolute bottom-6 left-6 right-6 pt-6 border-t border-sidebar-border">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold">
+              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-xs font-bold">
                 {user?.name.charAt(0)}
               </div>
-              <div className="text-sm text-white font-medium">{user?.name}</div>
+              <div className="text-sm text-sidebar-foreground font-medium">{user?.name}</div>
             </div>
 
             <button
               onClick={logout}
-              className="text-[#999999] hover:text-red-500 transition-colors"
+              className="text-sidebar-foreground/70 hover:text-destructive transition-colors"
               title="Déconnexion"
             >
               <LogOut size={18} />
             </button>
           </div>
-          <div className="flex justify-between items-center mt-2">
-            <p className="text-[#666666] text-xs">
+          <div className="flex justify-between items-center mt-2 text-sidebar-foreground/50">
+            <p className="text-xs">
               Budget Familial v1.0
             </p>
             <ModeToggle />

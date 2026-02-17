@@ -34,18 +34,18 @@ export default function ExpensesSection() {
 
   const expensesByCategory = getExpensesByCategory(expenseData);
   const totalExpenses = expenseData.reduce((sum, expense) => sum + expense.amount, 0);
-  const COLORS = ['#ffffff', '#999999', '#666666', '#333333', '#1a1a1a'];
+  const COLORS = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6', '#a855f7', '#ec4899'];
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
+          <h1 className="text-3xl font-bold text-foreground mb-2 flex items-center gap-3">
             <TrendingDown size={32} />
             Dépenses
           </h1>
-          <p className="text-[#999999]">Suivi des dépenses familiales</p>
+          <p className="text-muted-foreground">Suivi des dépenses familiales</p>
         </div>
         <div className="flex gap-2">
           <button onClick={() => setIsModalOpen(true)} className="budget-button flex items-center gap-2">
@@ -63,7 +63,7 @@ export default function ExpensesSection() {
       {/* Total expenses */}
       <div className="budget-card">
         <p className="budget-stat-label mb-4">Total des dépenses</p>
-        <p className="text-4xl font-bold text-white">{totalExpenses.toLocaleString('fr-FR')} €</p>
+        <p className="text-4xl font-bold text-foreground">{totalExpenses.toLocaleString('fr-FR')} Ar</p>
       </div>
 
       {/* Charts */}
@@ -87,7 +87,10 @@ export default function ExpensesSection() {
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
-              <Tooltip formatter={(value) => `${value}€`} />
+              <Tooltip
+                contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', color: 'hsl(var(--foreground))' }}
+                formatter={(value) => `${value}Ar`}
+              />
             </PieChart>
           </ResponsiveContainer>
         </div>
@@ -99,12 +102,12 @@ export default function ExpensesSection() {
             {expensesByCategory.map((category, index) => (
               <div key={category.name}>
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-white font-medium">{category.name}</span>
-                  <span className="text-white font-semibold">{category.value}€</span>
+                  <span className="text-foreground font-medium">{category.name}</span>
+                  <span className="text-foreground font-semibold">{category.value}Ar</span>
                 </div>
-                <div className="w-full bg-[#333333] rounded-full h-2">
+                <div className="w-full bg-muted rounded-full h-2">
                   <div
-                    className="bg-white h-2 rounded-full transition-all"
+                    className="bg-primary h-2 rounded-full transition-all"
                     style={{ width: `${(category.value / totalExpenses) * 100}%` }}
                   />
                 </div>
@@ -120,36 +123,36 @@ export default function ExpensesSection() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-[#333333]">
-                <th className="text-left py-3 px-4 text-[#999999] text-sm font-medium">Description</th>
-                <th className="text-left py-3 px-4 text-[#999999] text-sm font-medium">Catégorie</th>
-                <th className="text-left py-3 px-4 text-[#999999] text-sm font-medium">Membre</th>
-                <th className="text-right py-3 px-4 text-[#999999] text-sm font-medium">Montant</th>
-                <th className="text-right py-3 px-4 text-[#999999] text-sm font-medium">Date</th>
-                <th className="text-right py-3 px-4 text-[#999999] text-sm font-medium">Actions</th>
+              <tr className="border-b border-border">
+                <th className="text-left py-3 px-4 text-muted-foreground text-sm font-medium">Description</th>
+                <th className="text-left py-3 px-4 text-muted-foreground text-sm font-medium">Catégorie</th>
+                <th className="text-left py-3 px-4 text-muted-foreground text-sm font-medium">Membre</th>
+                <th className="text-right py-3 px-4 text-muted-foreground text-sm font-medium">Montant</th>
+                <th className="text-right py-3 px-4 text-muted-foreground text-sm font-medium">Date</th>
+                <th className="text-right py-3 px-4 text-muted-foreground text-sm font-medium">Actions</th>
               </tr>
             </thead>
             <tbody>
               {expenseData.map(expense => (
-                <tr key={expense.id} className="border-b border-[#333333] hover:bg-[#1a1a1a] transition-colors">
-                  <td className="py-3 px-4 text-white">{expense.description}</td>
+                <tr key={expense.id} className="border-b border-border hover:bg-accent/50 transition-colors">
+                  <td className="py-3 px-4 text-foreground">{expense.description}</td>
                   <td className="py-3 px-4">
                     <span className="budget-tag">{expense.category}</span>
                   </td>
-                  <td className="py-3 px-4 text-[#999999]">{expense.member}</td>
-                  <td className="py-3 px-4 text-right text-white font-semibold">
-                    {expense.amount.toLocaleString('fr-FR')} €
+                  <td className="py-3 px-4 text-muted-foreground">{expense.member}</td>
+                  <td className="py-3 px-4 text-right text-foreground font-semibold">
+                    {expense.amount.toLocaleString('fr-FR')} Ar
                   </td>
-                  <td className="py-3 px-4 text-right text-[#999999] text-sm">
+                  <td className="py-3 px-4 text-right text-muted-foreground text-sm">
                     {new Date(expense.date).toLocaleDateString('fr-FR')}
                   </td>
                   <td className="py-3 px-4 text-right flex gap-2 justify-end">
                     <button
                       onClick={() => handleEditClick(expense.id)}
-                      className="p-2 hover:bg-[#333333] rounded transition-colors"
+                      className="p-2 hover:bg-muted rounded transition-colors"
                       title="Éditer"
                     >
-                      <Edit2 size={16} className="text-white" />
+                      <Edit2 size={16} className="text-foreground" />
                     </button>
                     <button
                       onClick={() => setDeleteConfirm(expense.id)}

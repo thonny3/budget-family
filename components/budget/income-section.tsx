@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useBudget } from '@/lib/budget-context';
 import { getIncomeBySource } from '@/lib/data';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 import { TrendingUp, Plus, Edit2, Trash2 } from 'lucide-react';
 import { IncomeModal } from './modals/income-modal';
 import { ConfirmationModal } from './modals/confirmation-modal';
@@ -11,7 +11,7 @@ import { ConfirmationModal } from './modals/confirmation-modal';
 export default function IncomeSection() {
   const { data, addIncome, updateIncome, deleteIncome, clearIncomes } = useBudget();
   const incomeData = data.incomes;
-  
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
@@ -35,6 +35,7 @@ export default function IncomeSection() {
   const incomeBySource = getIncomeBySource(incomeData);
   const totalIncome = incomeData.reduce((sum, income) => sum + income.amount, 0);
   const memberIncome: { [key: string]: number } = {};
+  const COLORS = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6', '#a855f7', '#ec4899'];
 
   incomeData.forEach(income => {
     memberIncome[income.member] = (memberIncome[income.member] || 0) + income.amount;
@@ -45,11 +46,11 @@ export default function IncomeSection() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
+          <h1 className="text-3xl font-bold text-foreground mb-2 flex items-center gap-3">
             <TrendingUp size={32} />
             Revenus
           </h1>
-          <p className="text-[#999999]">Gestion des revenus familiaux</p>
+          <p className="text-muted-foreground">Gestion des revenus familiaux</p>
         </div>
         <div className="flex gap-2">
           <button onClick={() => setIsModalOpen(true)} className="budget-button flex items-center gap-2">
@@ -67,7 +68,7 @@ export default function IncomeSection() {
       {/* Total income */}
       <div className="budget-card">
         <p className="budget-stat-label mb-4">Total des revenus</p>
-        <p className="text-4xl font-bold text-white">{totalIncome.toLocaleString('fr-FR')} €</p>
+        <p className="text-4xl font-bold text-foreground">{totalIncome.toLocaleString('fr-FR')} Ar</p>
       </div>
 
       {/* Charts */}
@@ -77,14 +78,18 @@ export default function IncomeSection() {
           <h2 className="budget-card-header">Revenus par source</h2>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={incomeBySource}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#333333" />
-              <XAxis dataKey="name" stroke="#999999" />
-              <YAxis stroke="#999999" />
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+              <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" />
+              <YAxis stroke="hsl(var(--muted-foreground))" />
               <Tooltip
-                contentStyle={{ backgroundColor: '#1a1a1a', border: '1px solid #333333', color: '#ffffff' }}
-                formatter={(value) => `${value}€`}
+                contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', color: 'hsl(var(--foreground))' }}
+                formatter={(value) => `${value}Ar`}
               />
-              <Bar dataKey="value" fill="#ffffff" />
+              <Bar dataKey="value">
+                {incomeBySource.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -96,7 +101,7 @@ export default function IncomeSection() {
             {Object.entries(memberIncome).map(([member, amount]) => (
               <div key={member} className="budget-stat">
                 <span className="budget-stat-label">{member}</span>
-                <span className="budget-stat-value">{amount.toLocaleString('fr-FR')} €</span>
+                <span className="budget-stat-value">{amount.toLocaleString('fr-FR')} Ar</span>
               </div>
             ))}
           </div>
@@ -109,32 +114,32 @@ export default function IncomeSection() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-[#333333]">
-                <th className="text-left py-3 px-4 text-[#999999] text-sm font-medium">Membre</th>
-                <th className="text-left py-3 px-4 text-[#999999] text-sm font-medium">Source</th>
-                <th className="text-right py-3 px-4 text-[#999999] text-sm font-medium">Montant</th>
-                <th className="text-right py-3 px-4 text-[#999999] text-sm font-medium">Date</th>
-                <th className="text-right py-3 px-4 text-[#999999] text-sm font-medium">Actions</th>
+              <tr className="border-b border-border">
+                <th className="text-left py-3 px-4 text-muted-foreground text-sm font-medium">Membre</th>
+                <th className="text-left py-3 px-4 text-muted-foreground text-sm font-medium">Source</th>
+                <th className="text-right py-3 px-4 text-muted-foreground text-sm font-medium">Montant</th>
+                <th className="text-right py-3 px-4 text-muted-foreground text-sm font-medium">Date</th>
+                <th className="text-right py-3 px-4 text-muted-foreground text-sm font-medium">Actions</th>
               </tr>
             </thead>
             <tbody>
               {incomeData.map(income => (
-                <tr key={income.id} className="border-b border-[#333333] hover:bg-[#1a1a1a] transition-colors">
-                  <td className="py-3 px-4 text-white">{income.member}</td>
-                  <td className="py-3 px-4 text-[#999999]">{income.source}</td>
-                  <td className="py-3 px-4 text-right text-white font-semibold">
-                    {income.amount.toLocaleString('fr-FR')} €
+                <tr key={income.id} className="border-b border-border hover:bg-accent/50 transition-colors">
+                  <td className="py-3 px-4 text-foreground">{income.member}</td>
+                  <td className="py-3 px-4 text-muted-foreground">{income.source}</td>
+                  <td className="py-3 px-4 text-right text-foreground font-semibold">
+                    {income.amount.toLocaleString('fr-FR')} Ar
                   </td>
-                  <td className="py-3 px-4 text-right text-[#999999] text-sm">
+                  <td className="py-3 px-4 text-right text-muted-foreground text-sm">
                     {new Date(income.date).toLocaleDateString('fr-FR')}
                   </td>
                   <td className="py-3 px-4 text-right flex gap-2 justify-end">
                     <button
                       onClick={() => handleEditClick(income.id)}
-                      className="p-2 hover:bg-[#333333] rounded transition-colors"
+                      className="p-2 hover:bg-muted rounded transition-colors"
                       title="Éditer"
                     >
-                      <Edit2 size={16} className="text-white" />
+                      <Edit2 size={16} className="text-foreground" />
                     </button>
                     <button
                       onClick={() => setDeleteConfirm(income.id)}

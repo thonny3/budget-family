@@ -52,11 +52,11 @@ export default function ReimbursementSection() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
+          <h1 className="text-3xl font-bold text-foreground mb-2 flex items-center gap-3">
             <RefreshCw size={32} />
             Remboursements
           </h1>
-          <p className="text-[#999999]">Gestion des remboursements entre membres de la famille</p>
+          <p className="text-muted-foreground">Gestion des remboursements entre membres de la famille</p>
         </div>
         <div className="flex gap-2">
           <button onClick={() => setIsModalOpen(true)} className="budget-button flex items-center gap-2">
@@ -75,22 +75,22 @@ export default function ReimbursementSection() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="budget-card">
           <p className="budget-stat-label mb-2">Total remboursements</p>
-          <p className="text-3xl font-bold text-white">{totalReimbursements.toLocaleString('fr-FR')} €</p>
+          <p className="text-3xl font-bold text-foreground">{totalReimbursements.toLocaleString('fr-FR')} Ar</p>
         </div>
 
         <div className="budget-card">
           <p className="budget-stat-label mb-2">En attente</p>
-          <p className="text-3xl font-bold text-white">{pendingReimbursements.length}</p>
-          <p className="text-sm text-[#999999] mt-2">
-            {(pendingReimbursements.reduce((sum, r) => sum + r.amount, 0)).toLocaleString('fr-FR')} €
+          <p className="text-3xl font-bold text-foreground">{pendingReimbursements.length}</p>
+          <p className="text-sm text-muted-foreground mt-2">
+            {(pendingReimbursements.reduce((sum, r) => sum + r.amount, 0)).toLocaleString('fr-FR')} Ar
           </p>
         </div>
 
         <div className="budget-card">
           <p className="budget-stat-label mb-2">Validés</p>
-          <p className="text-3xl font-bold text-white">{validatedReimbursements.length}</p>
-          <p className="text-sm text-[#999999] mt-2">
-            {(validatedReimbursements.reduce((sum, r) => sum + r.amount, 0)).toLocaleString('fr-FR')} €
+          <p className="text-3xl font-bold text-foreground">{validatedReimbursements.length}</p>
+          <p className="text-sm text-muted-foreground mt-2">
+            {(validatedReimbursements.reduce((sum, r) => sum + r.amount, 0)).toLocaleString('fr-FR')} Ar
           </p>
         </div>
       </div>
@@ -102,35 +102,35 @@ export default function ReimbursementSection() {
           {reimbursementData.map(reimbursement => (
             <div
               key={reimbursement.id}
-              className="flex items-start justify-between p-4 bg-[#0f0f0f] rounded-lg border border-[#333333] hover:border-[#555555] transition-colors"
+              className="flex items-start justify-between p-4 bg-muted/30 rounded-lg border border-border hover:border-primary/50 transition-colors"
             >
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
-                  <h3 className="text-white font-semibold text-lg">
+                  <h3 className="text-foreground font-semibold text-lg">
                     {reimbursement.from} → {reimbursement.to}
                   </h3>
                   <span className={getStatusTag(reimbursement.status)}>
                     {reimbursement.status}
                   </span>
                 </div>
-                <p className="text-[#999999] mb-2">{reimbursement.reason}</p>
-                <p className="text-sm text-[#666666]">
+                <p className="text-muted-foreground mb-2">{reimbursement.reason}</p>
+                <p className="text-sm opacity-60">
                   {new Date(reimbursement.date).toLocaleDateString('fr-FR')}
                 </p>
               </div>
               <div className="flex items-center gap-4">
                 <div className="text-right">
-                  <p className="text-2xl font-bold text-white">
-                    {reimbursement.amount.toLocaleString('fr-FR')} €
+                  <p className="text-2xl font-bold text-foreground">
+                    {reimbursement.amount.toLocaleString('fr-FR')} Ar
                   </p>
                 </div>
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleEditClick(reimbursement.id)}
-                    className="p-2 hover:bg-[#333333] rounded transition-colors"
+                    className="p-2 hover:bg-muted rounded transition-colors"
                     title="Éditer"
                   >
-                    <Edit2 size={16} className="text-white" />
+                    <Edit2 size={16} className="text-foreground" />
                   </button>
                   <button
                     onClick={() => setDeleteConfirm(reimbursement.id)}
@@ -158,7 +158,7 @@ export default function ReimbursementSection() {
               return (
                 <div key={member} className="budget-stat">
                   <span className="budget-stat-label">{member} doit recevoir</span>
-                  <span className="budget-stat-value text-[#4ade80]">{owed.toLocaleString('fr-FR')} €</span>
+                  <span className="budget-stat-value text-green-600 dark:text-green-400">{owed.toLocaleString('fr-FR')} Ar</span>
                 </div>
               );
             })}
@@ -175,7 +175,7 @@ export default function ReimbursementSection() {
               return (
                 <div key={member} className="budget-stat">
                   <span className="budget-stat-label">{member} doit payer</span>
-                  <span className="budget-stat-value text-[#f87171]">{owes.toLocaleString('fr-FR')} €</span>
+                  <span className="budget-stat-value text-red-600 dark:text-red-400">{owes.toLocaleString('fr-FR')} Ar</span>
                 </div>
               );
             })}

@@ -62,11 +62,11 @@ export default function BillsSection() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
+          <h1 className="text-3xl font-bold text-foreground mb-2 flex items-center gap-3">
             <FileText size={32} />
             Factures & Maison
           </h1>
-          <p className="text-[#999999]">Gestion des factures et dépenses de la maison</p>
+          <p className="text-muted-foreground">Gestion des factures et dépenses de la maison</p>
         </div>
         <div className="flex gap-2">
           <button onClick={() => setIsModalOpen(true)} className="budget-button flex items-center gap-2">
@@ -85,30 +85,30 @@ export default function BillsSection() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="budget-card">
           <p className="budget-stat-label mb-2">Total factures</p>
-          <p className="text-3xl font-bold text-white">{totalBills.toLocaleString('fr-FR')} €</p>
+          <p className="text-3xl font-bold text-foreground">{totalBills.toLocaleString('fr-FR')} Ar</p>
         </div>
 
         <div className="budget-card">
           <p className="budget-stat-label mb-2">Factures payées</p>
-          <p className="text-3xl font-bold text-white">{paidBills.length}</p>
-          <p className="text-sm text-[#999999] mt-2">
-            {(paidBills.reduce((sum, b) => sum + b.amount, 0)).toLocaleString('fr-FR')} €
+          <p className="text-3xl font-bold text-foreground">{paidBills.length}</p>
+          <p className="text-sm text-muted-foreground mt-2">
+            {(paidBills.reduce((sum, b) => sum + b.amount, 0)).toLocaleString('fr-FR')} Ar
           </p>
         </div>
 
         <div className="budget-card">
           <p className="budget-stat-label mb-2">En attente</p>
-          <p className="text-3xl font-bold text-white">{pendingBills.length}</p>
-          <p className="text-sm text-[#999999] mt-2">
-            {(pendingBills.reduce((sum, b) => sum + b.amount, 0)).toLocaleString('fr-FR')} €
+          <p className="text-3xl font-bold text-foreground">{pendingBills.length}</p>
+          <p className="text-sm text-muted-foreground mt-2">
+            {(pendingBills.reduce((sum, b) => sum + b.amount, 0)).toLocaleString('fr-FR')} Ar
           </p>
         </div>
 
         <div className="budget-card">
           <p className="budget-stat-label mb-2">En retard</p>
-          <p className="text-3xl font-bold text-white">{overdueBills.length}</p>
-          <p className="text-sm text-[#999999] mt-2">
-            {(overdueBills.reduce((sum, b) => sum + b.amount, 0)).toLocaleString('fr-FR')} €
+          <p className="text-3xl font-bold text-foreground">{overdueBills.length}</p>
+          <p className="text-sm text-muted-foreground mt-2">
+            {(overdueBills.reduce((sum, b) => sum + b.amount, 0)).toLocaleString('fr-FR')} Ar
           </p>
         </div>
       </div>
@@ -120,30 +120,30 @@ export default function BillsSection() {
           {billsData.map(bill => (
             <div
               key={bill.id}
-              className="flex items-start justify-between p-4 bg-[#0f0f0f] rounded-lg border border-[#333333] hover:border-[#555555] transition-colors"
+              className="flex items-start justify-between p-4 bg-muted/30 rounded-lg border border-border hover:border-primary/50 transition-colors"
             >
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
-                  <h3 className="text-white font-semibold text-lg">{bill.name}</h3>
+                  <h3 className="text-foreground font-semibold text-lg">{bill.name}</h3>
                   <span className={getStatusTag(bill.status)}>
                     {bill.status}
                   </span>
                 </div>
-                <div className="flex gap-6 text-sm text-[#999999]">
+                <div className="flex gap-6 text-sm text-muted-foreground">
                   <div>
-                    <span className="text-[#666666]">Assigné à: </span>
-                    <span className="text-white">{bill.assignedTo}</span>
+                    <span className="opacity-70">Assigné à: </span>
+                    <span className="text-foreground">{bill.assignedTo}</span>
                   </div>
                   <div>
-                    <span className="text-[#666666]">Échéance: </span>
-                    <span className="text-white">{new Date(bill.dueDate).toLocaleDateString('fr-FR')}</span>
+                    <span className="opacity-70">Échéance: </span>
+                    <span className="text-foreground">{new Date(bill.dueDate).toLocaleDateString('fr-FR')}</span>
                   </div>
                 </div>
               </div>
               <div className="flex items-center gap-4">
                 <div className="text-right">
-                  <p className="text-2xl font-bold text-white mb-2">
-                    {bill.amount.toLocaleString('fr-FR')} €
+                  <p className="text-2xl font-bold text-foreground mb-2">
+                    {bill.amount.toLocaleString('fr-FR')} Ar
                   </p>
                 </div>
 
@@ -180,8 +180,8 @@ export default function BillsSection() {
 
       {/* Alerts and modals section */}
       {overdueBills.length > 0 && (
-        <div className="budget-card border-[#f87171]">
-          <h2 className="budget-card-header flex items-center gap-2 text-[#f87171]">
+        <div className="budget-card border-destructive/50">
+          <h2 className="budget-card-header flex items-center gap-2 text-destructive">
             <AlertCircle size={24} />
             Factures en retard
           </h2>
@@ -189,7 +189,7 @@ export default function BillsSection() {
             {overdueBills.map(bill => (
               <div key={bill.id} className="budget-stat">
                 <span className="budget-stat-label">{bill.name}</span>
-                <span className="text-[#f87171] font-semibold">{bill.amount.toLocaleString('fr-FR')} €</span>
+                <span className="text-destructive font-semibold">{bill.amount.toLocaleString('fr-FR')} Ar</span>
               </div>
             ))}
           </div>

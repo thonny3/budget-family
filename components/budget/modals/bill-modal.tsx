@@ -1,5 +1,12 @@
 import { useState } from 'react';
 import { Bill } from '@/lib/data';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 interface BillModalProps {
   isOpen: boolean;
@@ -53,7 +60,7 @@ export function BillModal({ isOpen, bill, onSubmit, onClose }: BillModalProps) {
               placeholder="Ex: Électricité"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full bg-[#0f0f0f] border border-[#333333] rounded-lg px-3 py-2 text-white placeholder-[#666666]"
+              className="w-full bg-background border border-border rounded-lg px-3 py-2 text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary transition-colors"
             />
           </div>
           <div>
@@ -63,7 +70,7 @@ export function BillModal({ isOpen, bill, onSubmit, onClose }: BillModalProps) {
               placeholder="0"
               value={formData.amount}
               onChange={(e) => setFormData({ ...formData, amount: parseFloat(e.target.value) || 0 })}
-              className="w-full bg-[#0f0f0f] border border-[#333333] rounded-lg px-3 py-2 text-white placeholder-[#666666]"
+              className="w-full bg-background border border-border rounded-lg px-3 py-2 text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary transition-colors"
             />
           </div>
           <div>
@@ -72,30 +79,41 @@ export function BillModal({ isOpen, bill, onSubmit, onClose }: BillModalProps) {
               type="date"
               value={formData.dueDate}
               onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
-              className="w-full bg-[#0f0f0f] border border-[#333333] rounded-lg px-3 py-2 text-white placeholder-[#666666]"
+              className="w-full bg-background border border-border rounded-lg px-3 py-2 text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary transition-colors"
             />
           </div>
           <div>
             <label className="block text-[#999999] text-sm mb-2">Assigné à</label>
-            <input
-              type="text"
-              placeholder="Ex: Jean"
+            <Select
               value={formData.assignedTo}
-              onChange={(e) => setFormData({ ...formData, assignedTo: e.target.value })}
-              className="w-full bg-[#0f0f0f] border border-[#333333] rounded-lg px-3 py-2 text-white placeholder-[#666666]"
-            />
+              onValueChange={(value) => setFormData({ ...formData, assignedTo: value })}
+            >
+              <SelectTrigger className="w-full bg-[#0f0f0f] border border-[#333333] text-white">
+                <SelectValue placeholder="Sélectionner un membre" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Jean">Jean</SelectItem>
+                <SelectItem value="Marie">Marie</SelectItem>
+                <SelectItem value="Enfants">Enfants</SelectItem>
+                <SelectItem value="Famille">Famille</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <div>
             <label className="block text-[#999999] text-sm mb-2">Statut</label>
-            <select
+            <Select
               value={formData.status}
-              onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-              className="w-full bg-[#0f0f0f] border border-[#333333] rounded-lg px-3 py-2 text-white"
+              onValueChange={(value) => setFormData({ ...formData, status: value })}
             >
-              <option value="Payée">Payée</option>
-              <option value="En attente">En attente</option>
-              <option value="En retard">En retard</option>
-            </select>
+              <SelectTrigger className="w-full bg-[#0f0f0f] border border-[#333333] text-white">
+                <SelectValue placeholder="Sélectionner un statut" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Payée">Payée</SelectItem>
+                <SelectItem value="En attente">En attente</SelectItem>
+                <SelectItem value="En retard">En retard</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <div className="flex gap-3 justify-end pt-4">
             <button type="button" onClick={onClose} className="budget-button-secondary">

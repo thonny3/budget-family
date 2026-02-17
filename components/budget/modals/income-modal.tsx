@@ -1,5 +1,12 @@
 import { useState } from 'react';
-import { Income } from '@/lib/data';
+import { Income, INCOME_CATEGORIES } from '@/lib/data';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 interface IncomeModalProps {
   isOpen: boolean;
@@ -48,13 +55,20 @@ export function IncomeModal({ isOpen, income, onSubmit, onClose }: IncomeModalPr
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-[#999999] text-sm mb-2">Membre</label>
-            <input
-              type="text"
-              placeholder="Ex: Jean"
+            <Select
               value={formData.member}
-              onChange={(e) => setFormData({ ...formData, member: e.target.value })}
-              className="w-full bg-[#0f0f0f] border border-[#333333] rounded-lg px-3 py-2 text-white placeholder-[#666666]"
-            />
+              onValueChange={(value) => setFormData({ ...formData, member: value })}
+            >
+              <SelectTrigger className="w-full bg-[#0f0f0f] border border-[#333333] text-white">
+                <SelectValue placeholder="Sélectionner un membre" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Jean">Jean</SelectItem>
+                <SelectItem value="Marie">Marie</SelectItem>
+                <SelectItem value="Enfants">Enfants</SelectItem>
+                <SelectItem value="Famille">Famille</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <div>
             <label className="block text-[#999999] text-sm mb-2">Source</label>
@@ -63,7 +77,7 @@ export function IncomeModal({ isOpen, income, onSubmit, onClose }: IncomeModalPr
               placeholder="Ex: Salaire"
               value={formData.source}
               onChange={(e) => setFormData({ ...formData, source: e.target.value })}
-              className="w-full bg-[#0f0f0f] border border-[#333333] rounded-lg px-3 py-2 text-white placeholder-[#666666]"
+              className="w-full bg-background border border-border rounded-lg px-3 py-2 text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary transition-colors"
             />
           </div>
           <div>
@@ -73,7 +87,7 @@ export function IncomeModal({ isOpen, income, onSubmit, onClose }: IncomeModalPr
               placeholder="0"
               value={formData.amount}
               onChange={(e) => setFormData({ ...formData, amount: parseFloat(e.target.value) || 0 })}
-              className="w-full bg-[#0f0f0f] border border-[#333333] rounded-lg px-3 py-2 text-white placeholder-[#666666]"
+              className="w-full bg-background border border-border rounded-lg px-3 py-2 text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary transition-colors"
             />
           </div>
           <div>
@@ -82,18 +96,26 @@ export function IncomeModal({ isOpen, income, onSubmit, onClose }: IncomeModalPr
               type="date"
               value={formData.date}
               onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-              className="w-full bg-[#0f0f0f] border border-[#333333] rounded-lg px-3 py-2 text-white placeholder-[#666666]"
+              className="w-full bg-background border border-border rounded-lg px-3 py-2 text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary transition-colors"
             />
           </div>
           <div>
             <label className="block text-[#999999] text-sm mb-2">Catégorie</label>
-            <input
-              type="text"
-              placeholder="Ex: Emploi"
+            <Select
               value={formData.category}
-              onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-              className="w-full bg-[#0f0f0f] border border-[#333333] rounded-lg px-3 py-2 text-white placeholder-[#666666]"
-            />
+              onValueChange={(value) => setFormData({ ...formData, category: value })}
+            >
+              <SelectTrigger className="w-full bg-[#0f0f0f] border border-[#333333] text-white">
+                <SelectValue placeholder="Sélectionner une catégorie" />
+              </SelectTrigger>
+              <SelectContent>
+                {INCOME_CATEGORIES.map((category) => (
+                  <SelectItem key={category} value={category}>
+                    {category}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           <div className="flex gap-3 justify-end pt-4">
             <button type="button" onClick={onClose} className="budget-button-secondary">

@@ -12,17 +12,17 @@ export function SavingModal({ isOpen, saving, onSubmit, onClose }: SavingModalPr
   const [formData, setFormData] = useState(
     saving
       ? {
-          goal: saving.goal,
-          targetAmount: saving.targetAmount,
-          currentAmount: saving.currentAmount,
-          deadline: saving.deadline,
-        }
+        goal: saving.goal,
+        targetAmount: saving.targetAmount,
+        currentAmount: saving.currentAmount,
+        deadline: saving.deadline,
+      }
       : {
-          goal: '',
-          targetAmount: 0,
-          currentAmount: 0,
-          deadline: new Date().toISOString().split('T')[0],
-        }
+        goal: '',
+        targetAmount: 0,
+        currentAmount: 0,
+        deadline: new Date().toISOString().split('T')[0],
+      }
   );
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -51,42 +51,42 @@ export function SavingModal({ isOpen, saving, onSubmit, onClose }: SavingModalPr
         <h2 className="budget-card-header">{saving ? 'Modifier l\'épargne' : 'Ajouter un objectif d\'épargne'}</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-[#999999] text-sm mb-2">Objectif</label>
+            <label className="block text-muted-foreground text-sm mb-2">Objectif</label>
             <input
               type="text"
               placeholder="Ex: Vacances"
               value={formData.goal}
               onChange={(e) => setFormData({ ...formData, goal: e.target.value })}
-              className="w-full bg-[#0f0f0f] border border-[#333333] rounded-lg px-3 py-2 text-white placeholder-[#666666]"
+              className="w-full bg-background border border-border rounded-lg px-3 py-2 text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary transition-colors"
             />
           </div>
           <div>
-            <label className="block text-[#999999] text-sm mb-2">Montant cible</label>
+            <label className="block text-muted-foreground text-sm mb-2">Montant cible</label>
             <input
               type="number"
               placeholder="0"
               value={formData.targetAmount}
               onChange={(e) => setFormData({ ...formData, targetAmount: parseFloat(e.target.value) || 0 })}
-              className="w-full bg-[#0f0f0f] border border-[#333333] rounded-lg px-3 py-2 text-white placeholder-[#666666]"
+              className="w-full bg-background border border-border rounded-lg px-3 py-2 text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary transition-colors"
             />
           </div>
           <div>
-            <label className="block text-[#999999] text-sm mb-2">Montant actuel</label>
+            <label className="block text-muted-foreground text-sm mb-2">Montant actuel</label>
             <input
               type="number"
               placeholder="0"
               value={formData.currentAmount}
               onChange={(e) => setFormData({ ...formData, currentAmount: parseFloat(e.target.value) || 0 })}
-              className="w-full bg-[#0f0f0f] border border-[#333333] rounded-lg px-3 py-2 text-white placeholder-[#666666]"
+              className="w-full bg-background border border-border rounded-lg px-3 py-2 text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary transition-colors"
             />
           </div>
           <div>
-            <label className="block text-[#999999] text-sm mb-2">Date limite</label>
+            <label className="block text-muted-foreground text-sm mb-2">Date limite</label>
             <input
               type="date"
               value={formData.deadline}
               onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
-              className="w-full bg-[#0f0f0f] border border-[#333333] rounded-lg px-3 py-2 text-white placeholder-[#666666]"
+              className="w-full bg-background border border-border rounded-lg px-3 py-2 text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary transition-colors"
             />
           </div>
           <div className="flex gap-3 justify-end pt-4">

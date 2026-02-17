@@ -1,5 +1,12 @@
 import { useState } from 'react';
 import { Reimbursement } from '@/lib/data';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 interface ReimbursementModalProps {
   isOpen: boolean;
@@ -51,23 +58,37 @@ export function ReimbursementModal({ isOpen, reimbursement, onSubmit, onClose }:
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-[#999999] text-sm mb-2">De (qui doit)</label>
-            <input
-              type="text"
-              placeholder="Ex: Jean"
+            <Select
               value={formData.from}
-              onChange={(e) => setFormData({ ...formData, from: e.target.value })}
-              className="w-full bg-[#0f0f0f] border border-[#333333] rounded-lg px-3 py-2 text-white placeholder-[#666666]"
-            />
+              onValueChange={(value) => setFormData({ ...formData, from: value })}
+            >
+              <SelectTrigger className="w-full bg-[#0f0f0f] border border-[#333333] text-white">
+                <SelectValue placeholder="Sélectionner un membre" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Jean">Jean</SelectItem>
+                <SelectItem value="Marie">Marie</SelectItem>
+                <SelectItem value="Enfants">Enfants</SelectItem>
+                <SelectItem value="Famille">Famille</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <div>
             <label className="block text-[#999999] text-sm mb-2">À (qui reçoit)</label>
-            <input
-              type="text"
-              placeholder="Ex: Marie"
+            <Select
               value={formData.to}
-              onChange={(e) => setFormData({ ...formData, to: e.target.value })}
-              className="w-full bg-[#0f0f0f] border border-[#333333] rounded-lg px-3 py-2 text-white placeholder-[#666666]"
-            />
+              onValueChange={(value) => setFormData({ ...formData, to: value })}
+            >
+              <SelectTrigger className="w-full bg-[#0f0f0f] border border-[#333333] text-white">
+                <SelectValue placeholder="Sélectionner un membre" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Jean">Jean</SelectItem>
+                <SelectItem value="Marie">Marie</SelectItem>
+                <SelectItem value="Enfants">Enfants</SelectItem>
+                <SelectItem value="Famille">Famille</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <div>
             <label className="block text-[#999999] text-sm mb-2">Montant</label>
@@ -76,7 +97,7 @@ export function ReimbursementModal({ isOpen, reimbursement, onSubmit, onClose }:
               placeholder="0"
               value={formData.amount}
               onChange={(e) => setFormData({ ...formData, amount: parseFloat(e.target.value) || 0 })}
-              className="w-full bg-[#0f0f0f] border border-[#333333] rounded-lg px-3 py-2 text-white placeholder-[#666666]"
+              className="w-full bg-background border border-border rounded-lg px-3 py-2 text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary transition-colors"
             />
           </div>
           <div>
@@ -86,7 +107,7 @@ export function ReimbursementModal({ isOpen, reimbursement, onSubmit, onClose }:
               placeholder="Ex: Essence partagée"
               value={formData.reason}
               onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
-              className="w-full bg-[#0f0f0f] border border-[#333333] rounded-lg px-3 py-2 text-white placeholder-[#666666]"
+              className="w-full bg-background border border-border rounded-lg px-3 py-2 text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary transition-colors"
             />
           </div>
           <div>
@@ -95,20 +116,24 @@ export function ReimbursementModal({ isOpen, reimbursement, onSubmit, onClose }:
               type="date"
               value={formData.date}
               onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-              className="w-full bg-[#0f0f0f] border border-[#333333] rounded-lg px-3 py-2 text-white placeholder-[#666666]"
+              className="w-full bg-background border border-border rounded-lg px-3 py-2 text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary transition-colors"
             />
           </div>
           <div>
             <label className="block text-[#999999] text-sm mb-2">Statut</label>
-            <select
+            <Select
               value={formData.status}
-              onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-              className="w-full bg-[#0f0f0f] border border-[#333333] rounded-lg px-3 py-2 text-white"
+              onValueChange={(value) => setFormData({ ...formData, status: value })}
             >
-              <option value="En attente">En attente</option>
-              <option value="Validé">Validé</option>
-              <option value="Rejeté">Rejeté</option>
-            </select>
+              <SelectTrigger className="w-full bg-[#0f0f0f] border border-[#333333] text-white">
+                <SelectValue placeholder="Sélectionner un statut" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="En attente">En attente</SelectItem>
+                <SelectItem value="Validé">Validé</SelectItem>
+                <SelectItem value="Rejeté">Rejeté</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <div className="flex gap-3 justify-end pt-4">
             <button type="button" onClick={onClose} className="budget-button-secondary">

@@ -52,6 +52,8 @@ export interface Transaction {
   amount: number;
   date: string;
   category: string;
+  member: string;
+  status: string;
 }
 
 export interface BudgetData {
@@ -62,6 +64,33 @@ export interface BudgetData {
   savings: Saving[];
   transactions: Transaction[];
 }
+
+export const EXPENSE_CATEGORIES = [
+  'Alimentation',
+  'Transport',
+  'Logement',
+  'Factures',
+  'Santé',
+  'Éducation',
+  'Vêtements',
+  'Divertissement',
+  'Technologie',
+  'Maison',
+  'Vacances',
+  'Autres'
+];
+
+export const INCOME_CATEGORIES = [
+  'Salaire',
+  'Prime',
+  'Freelance',
+  'Investissement',
+  'Cadeau',
+  'Allocations',
+  'Remboursement',
+  'Vente',
+  'Autres'
+];
 
 // Static Data
 export const incomeData: Income[] = [
@@ -110,12 +139,22 @@ export const transactionsData: Transaction[] = [
 ];
 
 // Summary calculations
-export const calculateTotals = () => {
-  const totalIncome = incomeData.reduce((sum, income) => sum + income.amount, 0);
-  const totalExpenses = expenseData.reduce((sum, expense) => sum + expense.amount, 0);
-  const totalBills = billsData.reduce((sum, bill) => sum + bill.amount, 0);
-  const totalSavings = savingsData.reduce((sum, saving) => sum + saving.currentAmount, 0);
-  
+export const calculateTotals = (data?: {
+  incomes: Income[],
+  expenses: Expense[],
+  bills: Bill[],
+  savings: Saving[]
+}) => {
+  const incomes = data?.incomes || incomeData;
+  const expenses = data?.expenses || expenseData;
+  const bills = data?.bills || billsData;
+  const savings = data?.savings || savingsData;
+
+  const totalIncome = incomes.reduce((sum, income) => sum + income.amount, 0);
+  const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
+  const totalBills = bills.reduce((sum, bill) => sum + bill.amount, 0);
+  const totalSavings = savings.reduce((sum, saving) => sum + saving.currentAmount, 0);
+
   return {
     income: totalIncome,
     expenses: totalExpenses,

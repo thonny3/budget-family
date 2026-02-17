@@ -3,14 +3,16 @@
 import { calculateTotals, getExpensesByCategory, getIncomeBySource, getBillsByStatus } from '@/lib/data';
 import { PieChart, Pie, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 import { TrendingUp, TrendingDown, Home, AlertCircle } from 'lucide-react';
+import { useBudget } from '@/lib/budget-context';
 
 export default function Dashboard() {
-  const totals = calculateTotals();
-  const expensesByCategory = getExpensesByCategory();
-  const incomeBySource = getIncomeBySource();
-  const billsByStatus = getBillsByStatus();
+  const { data } = useBudget();
+  const totals = calculateTotals(data);
+  const expensesByCategory = getExpensesByCategory(data.expenses);
+  const incomeBySource = getIncomeBySource(data.incomes);
+  const billsByStatus = getBillsByStatus(data.bills);
 
-  const COLORS = ['#ffffff', '#999999', '#666666', '#333333', '#1a1a1a'];
+  const COLORS = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6', '#a855f7', '#ec4899'];
 
   return (
     <div className="space-y-6">
@@ -28,7 +30,7 @@ export default function Dashboard() {
             <div>
               <p className="budget-stat-label">Revenus totaux</p>
               <p className="text-2xl font-bold text-foreground mt-2">
-                {totals.income.toLocaleString('fr-FR')} €
+                {totals.income.toLocaleString('fr-FR')} Ar
               </p>
             </div>
             <TrendingUp className="text-foreground opacity-50" size={32} />
@@ -40,7 +42,7 @@ export default function Dashboard() {
             <div>
               <p className="budget-stat-label">Dépenses</p>
               <p className="text-2xl font-bold text-foreground mt-2">
-                {totals.expenses.toLocaleString('fr-FR')} €
+                {totals.expenses.toLocaleString('fr-FR')} Ar
               </p>
             </div>
             <TrendingDown className="text-foreground opacity-50" size={32} />
@@ -52,7 +54,7 @@ export default function Dashboard() {
             <div>
               <p className="budget-stat-label">Factures</p>
               <p className="text-2xl font-bold text-foreground mt-2">
-                {totals.bills.toLocaleString('fr-FR')} €
+                {totals.bills.toLocaleString('fr-FR')} Ar
               </p>
             </div>
             <Home className="text-foreground opacity-50" size={32} />
@@ -65,7 +67,7 @@ export default function Dashboard() {
             <div>
               <p className="budget-stat-label">Balance</p>
               <p className={`text-2xl font-bold mt-2 ${totals.balance >= 0 ? 'text-foreground' : 'text-destructive'}`}>
-                {totals.balance.toLocaleString('fr-FR')} €
+                {totals.balance.toLocaleString('fr-FR')} Ar
               </p>
             </div>
             <AlertCircle className="text-foreground opacity-50" size={32} />
@@ -94,7 +96,7 @@ export default function Dashboard() {
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
-              <Tooltip formatter={(value) => `${value}€`} />
+              <Tooltip formatter={(value) => `${value}Ar`} />
             </PieChart>
           </ResponsiveContainer>
         </div>
@@ -104,14 +106,18 @@ export default function Dashboard() {
           <h2 className="budget-card-header">Revenus par source</h2>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={incomeBySource}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#333333" />
-              <XAxis dataKey="name" stroke="#999999" />
-              <YAxis stroke="#999999" />
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+              <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" />
+              <YAxis stroke="hsl(var(--muted-foreground))" />
               <Tooltip
                 contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', color: 'hsl(var(--foreground))' }}
-                formatter={(value) => `${value}€`}
+                formatter={(value) => `${value}Ar`}
               />
-              <Bar dataKey="value" fill="hsl(var(--foreground))" />
+              <Bar dataKey="value">
+                {incomeBySource.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -161,7 +167,7 @@ export default function Dashboard() {
         <h2 className="budget-card-header">Épargne totale</h2>
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-3xl font-bold text-foreground">{totals.savings.toLocaleString('fr-FR')} €</p>
+            <p className="text-3xl font-bold text-foreground">{totals.savings.toLocaleString('fr-FR')} Ar</p>
             <p className="text-muted-foreground text-sm mt-2">Épargné sur tous les objectifs</p>
           </div>
         </div>

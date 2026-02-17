@@ -39,11 +39,11 @@ export default function SavingsSection() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
+          <h1 className="text-3xl font-bold text-foreground mb-2 flex items-center gap-3">
             <PiggyBank size={32} />
             Épargne
           </h1>
-          <p className="text-[#999999]">Suivi des objectifs d'épargne familiale</p>
+          <p className="text-muted-foreground">Suivi des objectifs d'épargne familiale</p>
         </div>
         <div className="flex gap-2">
           <button onClick={() => setIsModalOpen(true)} className="budget-button flex items-center gap-2">
@@ -61,21 +61,21 @@ export default function SavingsSection() {
       {/* Overall progress */}
       <div className="budget-card">
         <p className="budget-stat-label mb-4">Épargne totale</p>
-        <p className="text-4xl font-bold text-white mb-4">
-          {totalSaved.toLocaleString('fr-FR')} / {totalTarget.toLocaleString('fr-FR')} €
+        <p className="text-4xl font-bold text-foreground mb-4">
+          {totalSaved.toLocaleString('fr-FR')} / {totalTarget.toLocaleString('fr-FR')} Ar
         </p>
-        <div className="w-full bg-[#333333] rounded-full h-4 overflow-hidden">
+        <div className="w-full bg-muted rounded-full h-4 overflow-hidden">
           <div
-            className="bg-white h-4 rounded-full transition-all"
+            className="bg-primary h-4 rounded-full transition-all"
             style={{ width: `${averageProgress}%` }}
           />
         </div>
-        <p className="text-[#999999] text-sm mt-3">{averageProgress}% d'objectif atteint</p>
+        <p className="text-muted-foreground text-sm mt-3">{averageProgress}% d'objectif atteint</p>
       </div>
 
       {/* Savings goals */}
       <div className="space-y-4">
-        <h2 className="text-xl font-bold text-white">Objectifs d'épargne</h2>
+        <h2 className="text-xl font-bold text-foreground">Objectifs d'épargne</h2>
         {savingsData.map(saving => {
           const progress = Math.round((saving.currentAmount / saving.targetAmount) * 100);
           const remaining = saving.targetAmount - saving.currentAmount;
@@ -90,24 +90,24 @@ export default function SavingsSection() {
             >
               <div className="flex items-start justify-between mb-4">
                 <div>
-                  <h3 className="text-white font-semibold text-lg">{saving.goal}</h3>
+                  <h3 className="text-foreground font-semibold text-lg">{saving.goal}</h3>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="text-right">
-                    <p className="text-2xl font-bold text-white">
-                      {saving.currentAmount.toLocaleString('fr-FR')} €
+                    <p className="text-2xl font-bold text-foreground">
+                      {saving.currentAmount.toLocaleString('fr-FR')} Ar
                     </p>
-                    <p className="text-sm text-[#999999]">
-                      {remaining.toLocaleString('fr-FR')} € à épargner
+                    <p className="text-sm text-muted-foreground">
+                      {remaining.toLocaleString('fr-FR')} Ar à épargner
                     </p>
                   </div>
                   <div className="flex gap-2">
                     <button
                       onClick={() => handleEditClick(saving.id)}
-                      className="p-2 hover:bg-[#333333] rounded transition-colors"
+                      className="p-2 hover:bg-muted rounded transition-colors"
                       title="Éditer"
                     >
-                      <Edit2 size={16} className="text-white" />
+                      <Edit2 size={16} className="text-foreground" />
                     </button>
                     <button
                       onClick={() => setDeleteConfirm(saving.id)}
@@ -123,14 +123,14 @@ export default function SavingsSection() {
               {/* Progress bar */}
               <div className="mb-4">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-[#999999] text-sm">
-                    Objectif: {saving.targetAmount.toLocaleString('fr-FR')} €
+                  <span className="text-muted-foreground text-sm">
+                    Objectif: {saving.targetAmount.toLocaleString('fr-FR')} Ar
                   </span>
-                  <span className="text-white font-semibold">{progress}%</span>
+                  <span className="text-foreground font-semibold">{progress}%</span>
                 </div>
-                <div className="w-full bg-[#333333] rounded-full h-3 overflow-hidden">
+                <div className="w-full bg-muted rounded-full h-3 overflow-hidden">
                   <div
-                    className="bg-white h-3 rounded-full transition-all"
+                    className="bg-primary h-3 rounded-full transition-all"
                     style={{ width: `${progress}%` }}
                   />
                 </div>
@@ -138,10 +138,10 @@ export default function SavingsSection() {
 
               {/* Deadline */}
               <div className="flex items-center justify-between text-sm">
-                <span className="text-[#666666]">
+                <span className="opacity-60">
                   Échéance: {new Date(saving.deadline).toLocaleDateString('fr-FR')}
                 </span>
-                <span className={`font-medium ${daysLeft > 0 ? 'text-[#999999]' : 'text-[#f87171]'}`}>
+                <span className={`font-medium ${daysLeft > 0 ? 'text-muted-foreground' : 'text-destructive'}`}>
                   {daysLeft > 0 ? `${daysLeft} jours` : 'Dépassé'}
                 </span>
               </div>
@@ -156,20 +156,20 @@ export default function SavingsSection() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="budget-card">
           <p className="budget-stat-label mb-2">Nombre d'objectifs</p>
-          <p className="text-3xl font-bold text-white">{savingsData.length}</p>
+          <p className="text-3xl font-bold text-foreground">{savingsData.length}</p>
         </div>
 
         <div className="budget-card">
           <p className="budget-stat-label mb-2">Montant moyen épargné</p>
-          <p className="text-3xl font-bold text-white">
-            {Math.round(totalSaved / savingsData.length).toLocaleString('fr-FR')} €
+          <p className="text-3xl font-bold text-foreground">
+            {Math.round(totalSaved / savingsData.length).toLocaleString('fr-FR')} Ar
           </p>
         </div>
 
         <div className="budget-card">
           <p className="budget-stat-label mb-2">Montant à atteindre</p>
-          <p className="text-3xl font-bold text-white">
-            {(totalTarget - totalSaved).toLocaleString('fr-FR')} €
+          <p className="text-3xl font-bold text-foreground">
+            {(totalTarget - totalSaved).toLocaleString('fr-FR')} Ar
           </p>
         </div>
       </div>
